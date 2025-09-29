@@ -1,0 +1,129 @@
+NO2 vs SO2 Feature Stack Comparison Table
+==========================================
+
+Generated: September 18, 2025
+Data Source: Google Drive Feature_Stacks
+
+## 1. OVERALL COMPARISON
+----------
+| Aspect | NO2 | SO2 | Notes |
+|-------------|-----|-----|------------|
+| Total Files | 1,826 | 1,826 | Same temporal coverage |
+| File Size | ~5.01 MB | ~5.54 MB | SO2 slightly larger |
+| Storage Format | Dictionary | Matrix | Different structures |
+| Total Features | 29 | 30 | SO2 has 1 extra feature |
+| Data Coverage | 34.7% | 26.9% | NO2 has better coverage |
+| NaN Ratio | Lower | 27.4% | SO2 has more missing data |
+| Valid Data Ratio | Higher | 45.9% | NO2 data quality better |
+
+## 2. FEATURE COMPARISON
+----------
+
+### 2.1 Common Features (Shared)
+| Feature Name | NO2 Name | SO2 Name | Category |
+|----------------------|----------|----------|---------------|
+| Digital Elevation Model | dem | dem | Terrain |
+| Terrain Slope | slope | slope | Terrain |
+| Population Density | pop | population | Socio-economic |
+| LULC Classes | lulc_class_0-9 | lulc_class_10-100 | Land Use |
+| Day of Year (Sine) | sin_doy | sin_doy | Temporal |
+| Day of Year (Cosine) | cos_doy | cos_doy | Temporal |
+| Weekday Weight | weekday_weight | weekday_weight | Temporal |
+| U-component Wind | u10 | u10 | Meteorological |
+| V-component Wind | v10 | v10 | Meteorological |
+| Wind Speed | ws | ws | Wind |
+| Wind Direction (Sine) | wd_sin | wd_sin | Wind |
+| Wind Direction (Cosine) | wd_cos | wd_cos | Wind |
+| Boundary Layer Height | blh | blh | Meteorological |
+| Total Precipitation | tp | tp | Meteorological |
+| 2m Temperature | t2m | t2m | Meteorological |
+| Surface Pressure | sp | sp | Meteorological |
+| Thermal Radiation | str | str | Meteorological |
+| Solar Radiation | ssr_clr | ssr_clear | Meteorological |
+| Lag 1 Day | no2_lag_1day | so2_lag1 | Lag |
+| Spatial Neighbor | no2_neighbor | so2_neighbor | Spatial |
+
+### 2.2 Unique Features
+| Pollutant | Unique Features | Count | Description |
+|------------------|-------------------------|------------|------------------|
+| NO2 | None | 0 | All features are common |
+| SO2 | so2_climate_prior | 1 | Monthly climatology |
+
+## 3. NAMING DIFFERENCES
+----------
+| Feature Type | NO2 Name | SO2 Name | Impact |
+|----------------------|----------|----------|-------------|
+| Population | pop | population | Minor |
+| Solar Radiation | ssr_clr | ssr_clear | Minor |
+| LULC Classes | lulc_class_0-9 | lulc_class_10-100 | Different encoding |
+| Lag Feature | no2_lag_1day | so2_lag1 | Pollutant-specific |
+| Neighbor Feature | no2_neighbor | so2_neighbor | Pollutant-specific |
+
+## 4. DATA QUALITY COMPARISON
+----------
+| Metric | NO2 | SO2 | Difference |
+|-------------|-----|-----|-----------------|
+| Valid Pixels | 64,642/186,300 | 50,168/186,300 | NO2: +14,474 pixels |
+| Coverage Ratio | 34.7% | 26.9% | NO2: +7.8% |
+| Missing Rate | ~65.3% | ~73.1% | SO2: +7.8% |
+| NaN Ratio | Lower | 27.4% | SO2 has more NaN |
+| Data Completeness | Better | Worse | NO2 advantage |
+
+## 5. STORAGE FORMAT COMPARISON
+----------
+| Aspect | NO2 (Dictionary) | SO2 (Matrix) |
+|-------------|------------------|--------------|
+| Structure | Individual arrays | Stacked in 'X' array |
+| Memory Efficiency | Higher | Lower |
+| Access Speed | Slower | Faster |
+| 3D CNN Compatibility | Requires conversion | Direct compatibility |
+| Metadata | Basic | Rich |
+| File Organization | Flat | Hierarchical |
+
+## 6. FEATURE CATEGORIES BREAKDOWN
+----------
+| Category | NO2 Count | SO2 Count | Notes |
+|---------------|-----------|-----------|------------|
+| Terrain | 2 | 2 | Same |
+| Population | 1 | 1 | Same |
+| Land Use | 10 | 10 | Different encoding |
+| Temporal | 3 | 3 | Same |
+| Meteorological | 8 | 8 | Same |
+| Wind | 3 | 3 | Same |
+| Lag/Spatial | 2 | 2 | Same |
+| Climatology | 0 | 1 | SO2 unique |
+| **TOTAL** | **29** | **30** | **SO2 +1** |
+
+## 7. TECHNICAL SPECIFICATIONS
+----------
+| Specification | NO2 | SO2 |
+|-------------------|-----|-----|
+| File Extension | .npz | .npz |
+| Compression | NumPy | NumPy |
+| Data Type | float32 | float32 |
+| Spatial Dimensions | 300×621 | 300×621 |
+| Feature Dimensions | 29×300×621 | 30×300×621 |
+| Memory per File | ~16.17 MB | ~22.21 MB |
+| Total Dataset Size | ~9.15 GB | ~10.11 GB |
+
+## 8. MODEL DEVELOPMENT IMPLICATIONS
+----------
+| Aspect | NO2 | SO2 | Recommendation |
+|-------------|-----|-----|-------------------|
+| Training Priority | High | Medium | Start with NO2 |
+| Data Preprocessing | Minimal | Moderate | Handle missing values |
+| Model Architecture | 29 channels | 30 channels | Separate models |
+| Feature Engineering | Standard | Enhanced | Use climatology |
+| Validation Strategy | Standard | Careful | Account for missing data |
+
+## 9. SUMMARY RECOMMENDATIONS
+----------
+1. **Format Standardization**: Convert NO2 to matrix format for consistency
+2. **Naming Alignment**: Standardize feature names between datasets
+3. **Training Sequence**: Start with NO2 (better data quality), then SO2
+4. **Feature Utilization**: Leverage SO2's climatology feature for missing value handling
+5. **Model Design**: Design separate 3D CNN models for each pollutant
+6. **Data Split**: Use time-based split (2019-2021 train, 2022 val, 2023 test)
+
+---
+End of Feature Stack Comparison Table

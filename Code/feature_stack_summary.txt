@@ -1,0 +1,204 @@
+Feature Stack Analysis Summary
+============================
+
+Generated: September 18, 2025
+Data Source: Google Drive Feature_Stacks
+Analysis Tool: Colab Feature Stack Inspector
+
+## 1. OVERALL STATISTICS
+----------
+- Total NO2 files: 1,826 (2019-2023)
+- Total SO2 files: 1,826 (2019-2023)
+- Spatial dimension: 300 x 621 = 186,300 pixels
+- Data type: float32 (4 bytes per pixel)
+
+## 2. NO2 FEATURE STACK
+----------
+Format: Dictionary format (individual feature arrays)
+File size: ~5.01 MB per file
+Total features: 29 (not 23 as initially counted)
+
+### 2.1 Core Data
+- no2_target: (300, 621) float32 - Original NO2 concentration data
+- no2_mask: (300, 621) uint8 - Valid pixel mask
+- Data coverage: 34.7% (better than SO2)
+
+### 2.2 Feature Categories
+
+#### Terrain Features (2)
+1. dem - Digital Elevation Model
+2. slope - Terrain slope
+
+#### Population (1)
+3. pop - Population density
+
+#### Land Use/Land Cover (10)
+4. lulc_class_0 - LULC class 0
+5. lulc_class_1 - LULC class 1
+6. lulc_class_2 - LULC class 2
+7. lulc_class_3 - LULC class 3
+8. lulc_class_4 - LULC class 4
+9. lulc_class_5 - LULC class 5
+10. lulc_class_6 - LULC class 6
+11. lulc_class_7 - LULC class 7
+12. lulc_class_8 - LULC class 8
+13. lulc_class_9 - LULC class 9
+
+#### Temporal Features (3)
+14. sin_doy - Sine of day of year
+15. cos_doy - Cosine of day of year
+16. weekday_weight - Weekday weight
+
+#### Meteorological Features (8)
+17. u10 - 10m u-component wind
+18. v10 - 10m v-component wind
+19. blh - Boundary layer height
+20. tp - Total precipitation
+21. t2m - 2m temperature
+22. sp - Surface pressure
+23. str - Surface net thermal radiation
+24. ssr_clr - Surface net solar radiation clear sky
+
+#### Wind Features (3)
+25. ws - Wind speed
+26. wd_sin - Wind direction sine
+27. wd_cos - Wind direction cosine
+
+#### Lag and Neighbor Features (2)
+28. no2_lag_1day - NO2 lag 1 day
+29. no2_neighbor - NO2 spatial neighbor mean
+
+## 3. SO2 FEATURE STACK
+----------
+Format: Matrix format (all features in 'X' array)
+File size: ~5.54 MB per file
+Total features: 30
+Data coverage: 26.9% (worse than NO2)
+NaN ratio: 27.4%
+
+### 3.1 Core Data
+- X: (30, 300, 621) float32 - Feature matrix
+- y: (300, 621) float32 - Original SO2 concentration data
+- mask: (300, 621) uint8 - Valid pixel mask
+- Valid data ratio: 45.9%
+
+### 3.2 Feature List (30 features)
+1. dem - Digital Elevation Model
+2. slope - Terrain slope
+3. population - Population density (note: different name from NO2)
+4. lulc_class_10 - LULC class 10
+5. lulc_class_20 - LULC class 20
+6. lulc_class_30 - LULC class 30
+7. lulc_class_40 - LULC class 40
+8. lulc_class_50 - LULC class 50
+9. lulc_class_60 - LULC class 60
+10. lulc_class_70 - LULC class 70
+11. lulc_class_80 - LULC class 80
+12. lulc_class_90 - LULC class 90
+13. lulc_class_100 - LULC class 100
+14. u10 - 10m u-component wind
+15. v10 - 10m v-component wind
+16. ws - Wind speed
+17. wd_sin - Wind direction sine
+18. wd_cos - Wind direction cosine
+19. blh - Boundary layer height
+20. tp - Total precipitation
+21. t2m - 2m temperature
+22. sp - Surface pressure
+23. str - Surface net thermal radiation
+24. ssr_clear - Surface net solar radiation clear sky (note: different name from NO2)
+25. so2_lag1 - SO2 lag 1 day
+26. so2_neighbor - SO2 spatial neighbor mean
+27. so2_climate_prior - SO2 monthly climatology (UNIQUE TO SO2)
+28. sin_doy - Sine of day of year
+29. cos_doy - Cosine of day of year
+30. weekday_weight - Weekday weight
+
+## 4. KEY DIFFERENCES
+----------
+
+### 4.1 Format Differences
+- NO2: Dictionary format (individual arrays)
+- SO2: Matrix format (stacked in 'X' array)
+
+### 4.2 Feature Differences
+- NO2: 29 features
+- SO2: 30 features
+- Unique SO2 feature: so2_climate_prior (monthly climatology)
+
+### 4.3 Naming Differences
+- Population: NO2 uses 'pop', SO2 uses 'population'
+- Solar radiation: NO2 uses 'ssr_clr', SO2 uses 'ssr_clear'
+- LULC classes: NO2 uses 0-9, SO2 uses 10-100 (different encoding)
+
+### 4.4 Data Quality Differences
+- NO2 coverage: 34.7% (better)
+- SO2 coverage: 26.9% (worse)
+- SO2 has higher missing rate but includes climatology feature
+
+## 5. METADATA INFORMATION
+----------
+
+### 5.1 SO2 Additional Metadata
+- cont_idx: (20,) - Continuous feature indices
+- onehot_idx: (10,) - One-hot encoded feature indices
+- noscale_idx: (0,) - No scaling feature indices
+- coverage: float64 - Data coverage ratio
+- trainable: bool - Whether data is trainable
+- pollutant: 'SO2' - Pollutant type
+- season: string - Season information
+- date: string - Date information
+- doy: int64 - Day of year
+- weekday: int64 - Weekday
+- year_len: int64 - Year length
+- grid_height: int64 - Grid height
+- grid_width: int64 - Grid width
+- lag1_fill_ratio: float64 - Lag1 fill ratio
+- neighbor_fill_ratio: float64 - Neighbor fill ratio
+- file_version: string - File version
+
+## 6. RECOMMENDATIONS
+----------
+
+### 6.1 Data Preprocessing
+1. Standardize feature names between NO2 and SO2
+2. Handle SO2's higher missing rate (27.4% NaN)
+3. Utilize SO2's climatology feature for missing value imputation
+
+### 6.2 Model Design
+1. Design separate models for NO2 and SO2 due to format differences
+2. Consider SO2's climatology feature as a strong predictor
+3. Use 3D CNN architecture with 30 channels for SO2, 29 for NO2
+
+### 6.3 Training Strategy
+1. Start with NO2 (better data quality, 34.7% coverage)
+2. Then train SO2 model (leverage climatology feature)
+3. Use time-based split: 2019-2021 (train), 2022 (val), 2023 (test)
+
+### 6.4 Feature Engineering
+1. Convert NO2 to matrix format for consistency
+2. Align LULC class encoding between datasets
+3. Standardize naming conventions
+
+## 7. TECHNICAL SPECIFICATIONS
+----------
+- File format: .npz (NumPy compressed)
+- Compression: Automatic NumPy compression
+- Memory usage: ~16-22 MB per file
+- Total dataset size: 19.26 GB (NO2: 9.15 GB + SO2: 10.11 GB)
+- Spatial resolution: 300 x 621 pixels
+- Temporal coverage: 2019-2023 (5 years)
+- Daily resolution: 1 file per day per pollutant
+
+## 8. NEXT STEPS
+----------
+1. Confirm feature stack structure meets expectations
+2. Start designing 3D CNN model architecture
+3. Prepare training/validation/test data split
+4. Implement data preprocessing pipeline
+5. Begin model training with NO2 dataset
+6. Evaluate and optimize model performance
+7. Apply lessons learned to SO2 model development
+
+---
+End of Feature Stack Analysis Summary
